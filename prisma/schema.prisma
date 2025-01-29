@@ -15,11 +15,12 @@ datasource db {
 }
 
 model User {
-  id       String  @id 
-  username String  @unique
-  Password String
-  sessions Session[]
-  reports Report[]
+  id        String  @id 
+  username  String  @unique
+  Password  String
+  userGroup Int     // 0:Admin;1:User
+  sessions  Session[]
+  reports   Report[]
 }
 
 model Report {
@@ -27,7 +28,17 @@ model Report {
   time    DateTime @default(now())
   user    User     @relation(fields: [userId], references: [id])
   userId  String  
-  content String 
+  status  String
+  replies Reply[] 
+}
+
+model Reply {
+  id         Int      @id @default(autoincrement())
+  reportId   String    // 关联的反馈ID
+  content    String   // 回复内容
+  isAdmin    Boolean  // 是否是管理员的回复
+  createdAt  DateTime @default(now())
+  report   Report @relation(fields: [reportId], references: [id])
 }
 
 model Session {
