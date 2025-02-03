@@ -1,4 +1,4 @@
-import { Button, Form, Textarea } from "@heroui/react";
+import { Button, Card, Form, Textarea } from "@heroui/react";
 import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import { useState } from "react";
 import NavBar from "~/components/NavBar";
@@ -8,23 +8,22 @@ export default function Report() {
   const [text, setText] = useState<string>("");
   
   return (
-    <div className="min-h-[780px] flex flex-col w-screen h-screen text-center">
+    <div className="min-w-[480px] min-h-[780px] flex flex-col w-screen h-screen text-center">
       {/* <SideBar/> */}
       <NavBar/>
-      <div>
-      <h1>提交反馈</h1>
-      <Form method="post">
-        <Textarea
-          label="Description"
-          labelPlacement="outside"
-          placeholder="Enter your description"
-          value={text}
-          variant="bordered"
-          onValueChange={setText}
-        />
-        <Button type="submit">提交</Button>
-      </Form>
-      <h2>我的反馈</h2>
+        <div className="w-full h-full grid grid-rows-8 grid-cols-5 ">
+          <Card className="col-start-2 col-span-3 row-start-2 row-span-3">
+            <h1 className="my-4">提交反馈</h1>
+            <Form method="post">
+              <Textarea  labelPlacement="outside" //label="Description"
+                placeholder="Enter your description" variant="bordered"
+                className="w-3/5 mx-auto" minRows={4} maxRows={5}
+                value={text} onValueChange={setText}
+              />
+              <Button type="submit" variant="ghost" className="w-24 m-auto">提交</Button>
+            </Form>
+          </Card>
+        <h2>我的反馈</h2>
       <ul>
         {/* {Report.map((Report:any) => (
           <li key={Report.id}>
@@ -40,7 +39,7 @@ export default function Report() {
           </li>
         ))} */}
       </ul>
-    </div>
+      </div>
     </div>
   );
 }
