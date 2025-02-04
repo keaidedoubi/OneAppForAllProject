@@ -15,13 +15,12 @@ import {
   } from "@remix-run/react";
   import { Mail, Lock, DoubleCheck, Eye, EyeClosed, User } from "iconoir-react";
   import { useEffect, useMemo, useState } from "react";
-  import {urlParameterWrapper} from "~/common";
+//   import {urlParameterWrapper} from "~/common";
 //   import {useFetcherSubmit} from "~/components/hook";
   import {isNotificationContent} from "~/components/Notification";
   import {useNotification} from "~/components/NotificationContext";
   import {RequestMethod, sendRequest, shouldRedirect} from "~/lib/request";
-import { checkLogin, userCookie } from "~/services/user.server";
-  import { commitSession, getSession } from "~/sessions";
+import { checkLogin, userCookie } from "~/services/session.server";
   
   export default function Login() {
     const [email, setEmail] = useState<string>("");
@@ -139,7 +138,7 @@ import { checkLogin, userCookie } from "~/services/user.server";
                   onSelectionChange={key => setSelectedLoginType(key as "id" | "username")}
                   color="primary"
                 >
-                  <Tab key="email" title="使用学号" className="w-full mx-0 px-0">
+                  <Tab key="id" title="使用学号" className="w-full mx-0 px-0">
                     <div className="flex flex-row items-center align-middle space-x-2">
                     <Input
                       value={account}
@@ -277,17 +276,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     let isRefresh = false;
     let saveToken = false;
     const intent = formData.get("intent");
-    const id = formData.get("id");
+    let id = '';
 
     let loginSuccessful;
-    await checkLogin(formData).then((res) => {
-        loginSuccessful = res;
+    await checkLogin(formData,intent).then((res) => {
+        loginSuccessful = res.res;
+        id = res.userId;
     });
-
+    
     if(loginSuccessful!=null){
         if (loginSuccessful) { //登录成功
-            const cookie = await userCookie.serialize({ id });
-            return redirect("/", {
+            // console.log(id);
+            const cookie = await userCookie.serialize({ userId:id });
+            console.log(cookie);
+            return redirect("/report", {
                 headers: {
                     "set-Cookie": cookie,
                 }
@@ -298,6 +300,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         }
     }
     return 0;
+
+
     // if(intent === "")
 
     // if (intent === "register") {

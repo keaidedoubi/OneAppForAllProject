@@ -3,6 +3,7 @@ import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import { useState } from "react";
 import NavBar from "~/components/NavBar";
 import { prisma } from "~/services/db.server";
+import { getUserFromCookie, userCookie } from "~/services/session.server";
 
 export default function Report() {
   const [text, setText] = useState<string>("");
@@ -44,30 +45,31 @@ export default function Report() {
   );
 }
 
-// export const loader: LoaderFunction = async ({ request }) => {
-//     // 获取当前用户的反馈列表
-//     const userId = "user-id-from-session"; // 从 session 中获取用户ID
-//     const feedbacks = await prisma.report.findMany({
-//       where: { userId },
-//       include: { replies: true },
-//     });
-//     return json({ feedbacks });
-//   };
+export const loader: LoaderFunction = async ({ request }) => {
+    // 获取当前用户的反馈列表
+    const userId = await getUserFromCookie(request);
+    const report = await prisma.report.findMany({
+        where: { userId }
+    })
+    console.log(report)
+return(1);
+   
+};
   
-//   export const action: ActionFunction = async ({ request }) => {
-//     const formData = await request.formData();
-//     const content = formData.get("content");
-//     const userId = "user-id-from-session"; // 从 session 中获取用户ID
+export const action: ActionFunction = async ({ request }) => {
+    const formData = await request.formData();
+    const content = formData.get("content");
+    const userId = "user-id-from-session"; // 从 session 中获取用户ID
   
-//     // 创建新的反馈
-//     await prisma.report.create({
-//       data: {
-//         userId,
-//         content,
-//         status: "pending",
-//       },
-//     });
+    // 创建新的反馈
+    // await prisma.report.create({
+    //   data: {
+    //     userId,
+    //     content,
+    //     status: "pending",
+    //   },
+    // });
   
-//     return null;
-//   };
+    return null;
+  };
   

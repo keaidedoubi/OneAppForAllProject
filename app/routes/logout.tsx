@@ -1,5 +1,5 @@
 import { ActionFunction, redirect } from "@remix-run/node";
-import { userCookie } from "~/services/user.server";
+import { userCookie } from "~/services/session.server";
 
 
 export const action: ActionFunction = async ({ request }) => {

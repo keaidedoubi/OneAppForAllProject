@@ -7,5 +7,7 @@ node_modules
 
 .vscode
 servicesConfig.json
+migrations
+dev.db
 
 .vscode

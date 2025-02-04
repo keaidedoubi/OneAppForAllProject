@@ -29,6 +29,7 @@ model Report {
   user    User     @relation(fields: [userId], references: [id])
   userId  String  
   status  String
+  content String
   replies Reply[] 
 }
 
