@@ -20,7 +20,7 @@ import {
   import {isNotificationContent} from "~/components/Notification";
   import {useNotification} from "~/components/NotificationContext";
   import {RequestMethod, sendRequest, shouldRedirect} from "~/lib/request";
-import { checkLogin } from "~/services/user.server";
+import { checkLogin, userCookie } from "~/services/user.server";
   import { commitSession, getSession } from "~/sessions";
   
   export default function Login() {
@@ -263,41 +263,41 @@ import { checkLogin } from "~/services/user.server";
 //     return redirect("/info", init);
 //   }
   
-  export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const session = await getSession(request.headers.get("Cookie"));
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+    // const session = await getSession(request.headers.get("Cookie"));
     // if (session.has("token")) {
     //   return redirectWithToken(request, session.get("token") as string);
     // }
     return null;
-  }
+}
   
-  export const action = async ({ request }: ActionFunctionArgs) => {
-    const formData = await request.formData();
-    const session = await getSession(request.headers.get("Cookie"));
+export const action = async ({ request }: ActionFunctionArgs) => {
     
-    const req = {
-      url: "",
-      body: {},
-    }
-  
+    const formData = await request.formData();
     let isRefresh = false;
     let saveToken = false;
-  
     const intent = formData.get("intent");
-    const loginSuccessful = await checkLogin(formData);
-    console.log(loginSuccessful  )
-    console.log(formData)
+    const id = formData.get("id");
+
+    let loginSuccessful;
+    await checkLogin(formData).then((res) => {
+        loginSuccessful = res;
+    });
+
     if(loginSuccessful!=null){
-        if (loginSuccessful) {
-            console.log(111)
-            return(1);
+        if (loginSuccessful) { //登录成功
+            const cookie = await userCookie.serialize({ id });
+            return redirect("/", {
+                headers: {
+                    "set-Cookie": cookie,
+                }
+              });
         }
         else{
-            console.log(222)
-            return json({message: "登录失败，请检查用户名和密码是否正确"});
+            return { message: "登录失败，请检查用户名和密码是否正确" };
         }
     }
-    return 1;
+    return 0;
     // if(intent === "")
 
     // if (intent === "register") {
@@ -381,4 +381,4 @@ import { checkLogin } from "~/services/user.server";
     //     },
     //   }
     // );
-  }
+}
