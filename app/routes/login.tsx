@@ -112,7 +112,6 @@ import { checkLogin, userCookie } from "~/services/session.server";
     //     setIsSendingEmail(false);
     //   }
     // });
-  
     return (
       <div className="flex items-center justify-center gap-3 flex-col w-[calc(100vw-2em)] max-w-[700px] min-h-[calc(100vh-12em)]">
         <Card className="w-[calc(100vw-2em)] max-w-[400px] m-auto">
@@ -124,12 +123,6 @@ import { checkLogin, userCookie } from "~/services/session.server";
             </CardHeader>
             <Divider />
             <CardBody className="pb-0 flex flex-col">
-                    <>
-                     
-
-                    </>
-                    
-
                 <Tabs
                   fullWidth
                   size="md"
@@ -166,7 +159,7 @@ import { checkLogin, userCookie } from "~/services/session.server";
                       </Button> */}
                     </div>
                   </Tab>
-                  <Tab key="password" title="使用用户名" className="w-full mx-0 px-0">
+                  <Tab key="username" title="使用用户名" className="w-full mx-0 px-0">
                     <Input
                       value={account}
                       onValueChange={setAccount}
@@ -177,8 +170,8 @@ import { checkLogin, userCookie } from "~/services/session.server";
                         </div>
                       }
                       label="用户名"
-                      type={passwordVisible ? "text" : "password"}
-                      name="account"
+                    //   type={passwordVisible ? "text" : "password"}
+                      name="username"
                       placeholder="请输入你的用户名"
                       variant="bordered"
                     />
@@ -273,17 +266,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
     
     const formData = await request.formData();
-    let isRefresh = false;
-    let saveToken = false;
     const intent = formData.get("intent");
-    let id = '';
 
+    // let isRefresh = false;
+    // let saveToken = false;
+    let id = '';
     let loginSuccessful;
+
     await checkLogin(formData,intent).then((res) => {
         loginSuccessful = res.res;
         id = res.userId;
-    });
-    
+    }).catch((err) => { return err;});
+
     if(loginSuccessful!=null){
         if (loginSuccessful) { //登录成功
             // console.log(id);
