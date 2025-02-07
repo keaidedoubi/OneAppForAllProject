@@ -3,11 +3,24 @@ import { prisma } from "./db.server";
 import { parse, serialize } from "cookie";
 
 export async function checkLogin( formData:any,intent:any ){
+    console.log(formData);
     let res = false;
     let userId = '';
     let find = '';
-
-    if( intent == "idLogin" ){
+    if( intent === "adminLogin" ){
+        const username = formData.get('username');
+        await prisma.user.findMany({ where:{ username } })
+        .then(( userInfo:any )=>{
+            userInfo.forEach(( e:any ) => {
+                const passwd = formData.get('password')
+               if( e.Password ==  passwd && e.userGroup == 0 ){
+                res = true;
+                userId = e.id;
+            } 
+            })
+        })
+    }
+    else if( intent === "idLogin" ){
         const id = formData.get('id');
         await prisma.user.findUnique({ where:{ id } })
         .then(( userInfo:any )=>{
@@ -17,7 +30,7 @@ export async function checkLogin( formData:any,intent:any ){
             }
        });  
     }
-    else if( intent == "usernameLogin" ){
+    else if( intent === "usernameLogin" ){
         const username = formData.get('username');
         await prisma.user.findUnique({ where:{ username } })
         .then(( userInfo:any )=>{
@@ -29,7 +42,6 @@ export async function checkLogin( formData:any,intent:any ){
     }
    return { res:res, userId:userId };
 }
-
 
 export const userCookie = createCookie("user", {
     httpOnly: true, // 防止客户端 JavaScript 访问
@@ -45,5 +57,23 @@ export async function getUserFromCookie(request: Request) {
     if (!cookieHeader) return null;
     const cookie = await userCookie.parse(request.headers.get("Cookie"));
     const userId = cookie?.userId;
+    return userId
+}
+
+export async function getAdminFromCookie(request: Request) {
+    const cookieHeader = request.headers.get("Cookie");
+    let isAdmin = false;
+
+    if (!cookieHeader) return null;
+    const cookie = await userCookie.parse(request.headers.get("Cookie"));
+    const userId = cookie?.userId;
+    await prisma.user.findUnique({ where:{ id:userId } })
+    .then(( userInfo:any )=>{
+        if( userInfo.userGroup == 0 ){
+            isAdmin = true;
+        }
+    })
+    if( !isAdmin ) return null;
+    
     return userId
 }

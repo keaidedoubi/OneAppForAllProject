@@ -24,15 +24,8 @@ import Meteors from "~/components/ui/Meteors";
   import {RequestMethod, sendRequest, shouldRedirect} from "~/lib/request";
 import { checkLogin, userCookie } from "~/services/session.server";
   
-  export default function Login() {
-    const [email, setEmail] = useState<string>("");
-    // const isInvalid = useMemo(() => {
-    //   if (email === "") return false;
-    //   // eslint-disable-next-line no-control-regex
-    //   const emailRegex = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\$$\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])).){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)$$)$/i;
-    //   return !String(email).match(emailRegex);
-    // }, [email]);
-  
+export default function adminLogin() {
+
     const [password, setPassword] = useState<string>("");
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const isInvalidPassword = useMemo(() => {
@@ -45,26 +38,6 @@ import { checkLogin, userCookie } from "~/services/session.server";
       return false;
     }, [password]);
   
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false);
-    const isInvalidConfirmPassword = useMemo(() => {
-      if (confirmPassword === "") return false;
-      return password !== confirmPassword;
-    }, [confirmPassword, password]);
-  
-    const [isFirstTimeSend, setIsFirstTimeSend] = useState<boolean>(true);
-    const [secondsLeft, setSecondsLeft] = useState<number>(0);
-    const [isFinished, setIsFinished] = useState<boolean>(false);
-    useEffect(() => {
-      if (secondsLeft > 0) {
-        const interval = setInterval(() => {
-          setSecondsLeft(prev => prev - 1);
-        }, 1000);
-        return () => clearInterval(interval);
-      } else {
-        setIsFinished(true);
-      }
-    }, [secondsLeft]);
   
     const [username, setUsername] = useState<string>("");
     const isInvalidUsername = useMemo(() => {
@@ -75,94 +48,20 @@ import { checkLogin, userCookie } from "~/services/session.server";
     }, [username]);
     
     const [account, setAccount] = useState<string>("");
-    const [isRegister, setIsRegister] = useState<boolean>(false);
-    const [isForgetPassword, setIsForgetPassword] = useState<boolean>(false);
-    const [selectedLoginType, setSelectedLoginType] = useState<"id" | "username">("id");
-    const [isSendingEmail, setIsSendingEmail] = useState<boolean>(false);
   
-    const {notice} = useNotification();
-    // const submitForm = useFetcherSubmit({
-    //   intent: "submit",
-    //   received: (data)=> {
-    //     notice({
-    //       id: Date.now(),
-    //       code: 200,
-    //       message: "操作成功",
-    //     });
-    //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //     // @ts-expect-error
-    //     if (data?.isRefresh) {
-    //       setIsForgetPassword(false);
-    //       setIsRegister(false);
-    //       setSelectedLoginType("password");
-    //     }
-    //   },
-    //   type: "reactForm"
-    // });
-    // const submitEmail = useFetcherSubmit({
-    //   intent: "submitEmail",
-    //   received: ()=>{
-    //     notice({
-    //       id: Date.now(),
-    //       code: 200,
-    //       message: "操作成功",
-    //     });
-    //     setSecondsLeft(60);
-    //     setIsFinished(false);
-    //   },
-    //   always: ()=>{
-    //     setIsSendingEmail(false);
-    //   }
-    // });
     return (
       <div className="flex items-center justify-center gap-3 flex-col w-[calc(100vw-2em)] max-w-[700px] min-h-[calc(100vh-12em)] m-auto">
         <Card className="w-[calc(100vw-2em)] max-w-[400px] m-auto">
           <Form method="post" >{/*onSubmit={submitForm} */}
             <CardHeader className="flex gap-3">
               <p className="justify-start text-xl font-bold pl-2">
-                {isRegister ? "注册" : isForgetPassword ? "忘记密码" : "登录"}
+                {"登录"}
               </p>
             </CardHeader>
             <Divider />
             <CardBody className="pb-0 flex flex-col">
-                <Tabs
-                  fullWidth
-                  size="md"
-                  aria-label="Tabs form"
-                  selectedKey={selectedLoginType}
-                  onSelectionChange={key => setSelectedLoginType(key as "id" | "username")}
-                  color="primary"
-                >
-                  <Tab key="id" title="使用学号" className="w-full mx-0 px-0">
-                    <div className="flex flex-row items-center align-middle space-x-2">
                     <Input
-                      value={account}
-                      onValueChange={setAccount}
-                      isRequired
-                      endContent={
-                        <div className="flex items-center">
-                          <User />
-                        </div>
-                      }
-                      label="学号"
-                    //   type={passwordVisible ? "text" : "password"}
-                      name="id"
-                      placeholder="请输入你的学号"
-                      variant="bordered"
-                    />
-                      {/* <Button color="primary" isLoading={!isFinished} type="submit" name="intent" value="sendCodeLogin" isDisabled={!isFinished  || isSendingEmail || email == ""} onClick={() => { //|| isInvalid
-                        setIsSendingEmail(true);
-                        setIsFirstTimeSend(false);
-                        submitEmail({
-                          email
-                        },"sendCodeLogin")
-                      }}>
-                        <span>{ secondsLeft > 0 ? `${secondsLeft} S` : isFirstTimeSend ? "发送验证码" : "重新发送" }</span>
-                      </Button> */}
-                    </div>
-                  </Tab>
-                  <Tab key="username" title="使用用户名" className="w-full mx-0 px-0">
-                    <Input
+                    
                       value={account}
                       onValueChange={setAccount}
                       isRequired
@@ -173,12 +72,11 @@ import { checkLogin, userCookie } from "~/services/session.server";
                       }
                       label="用户名"
                     //   type={passwordVisible ? "text" : "password"}
+                    // className="w-full mx-0 px-0"
                       name="username"
                       placeholder="请输入你的用户名"
                       variant="bordered"
                     />
-                   </Tab>
-                 </Tabs>
               <Input
                 value={password}
                 onValueChange={setPassword}
@@ -201,16 +99,10 @@ import { checkLogin, userCookie } from "~/services/session.server";
             </CardBody>
             <Divider className="my-3" />
             <CardFooter className="flex justify-end pt-0">
-                <p className="text-sm">忘记密码请联系管理员</p>
-                <Link size="sm" className="mx-2" href="/adminlogin">管理员登录</Link>
+                <p className="text-sm">忘记密码请联系技术中心</p>
+                <Link size="sm" className="mx-2" href="/login">用户登录</Link>
                 <div className="flex flex-col md:flex-row md:items-center items-end space-x-4">
-                  {/* <div className="flex text-center items-center text-sm mb-2 md:mb-0 pr-2 md:pr-0 gap-1">
-                    <Button color="primary" variant="light" className="text-sm" size="sm" onClick={() => setIsForgetPassword(true)}>忘记密码?</Button>
-                    <p>或</p>
-                    <p className="ml-1">还没有账户?</p>
-                    <Button color="primary" variant="light" className="text-sm px-1" size="sm" onClick={() => setIsRegister(true)}>注册</Button>
-                  </div> */}
-                  <Button color="primary" type="submit" name="intent" value={selectedLoginType + "Login"} isDisabled={
+                  <Button color="primary" type="submit" name="intent" value={"adminLogin"} isDisabled={
                     account === "" || password === "" // && selectedLoginType=== "password"|| isInvalid 
                   }>
                     登录
@@ -236,14 +128,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
     
     const formData = await request.formData();
-    const intent = formData.get("intent");
 
     // let isRefresh = false;
     // let saveToken = false;
     let id = '';
     let loginSuccessful;
 
-    await checkLogin(formData,intent).then((res) => {
+    await checkLogin(formData,'adminLogin').then((res) => {
         loginSuccessful = res.res;
         id = res.userId;
     }).catch((err) => { return err;});
@@ -253,7 +144,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             // console.log(id);
             const cookie = await userCookie.serialize({ userId:id });
             console.log(cookie);
-            return redirect("/report", {
+            return redirect("/dashboard", {
                 headers: {
                     "set-Cookie": cookie,
                 }
