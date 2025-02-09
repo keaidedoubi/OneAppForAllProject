@@ -13,7 +13,7 @@ export default function NavBar(){
           <Link href="/" className="border-y-1 border-white hover:border-b-cyan-700 text-black">首页</Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="/about" className="border-y-1 border-white hover:border-b-cyan-700 text-black">关于</Link>
+          <Link href="/login" className="border-y-1 border-white hover:border-b-cyan-700 text-black">登录</Link>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

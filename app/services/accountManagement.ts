@@ -20,7 +20,7 @@ export async function getAllUserInfo(){
 export async function addNewUsers(userInfo:Array<any>) {
     userInfo.forEach((user,i,userI)=>{
         if(user.username == ""){
-            userI[i].username = generateRandomString(8)+String(Date.now()%10000);
+            userI[i].username = generateRandomString(6)+String(Date.now()%10000);
             userI[i].Password = generateRandomString(12);
         }
     })
@@ -45,5 +45,16 @@ export async function addNewUsers(userInfo:Array<any>) {
 
 export async function resetPassword(userId:string){
     const newPass = generateRandomString(12);
+    const resetPasswd = await prisma.user.update({
+        where: { id: userId }, 
+        data: {
+          Password: newPass, 
+        },
+      });
     return newPass;
+}
+
+export async function deleteUsers(userIds:Array<string>){
+    const del = await prisma.user.deleteMany({ where:{ id:{ in:userIds }} })
+    return del;
 }

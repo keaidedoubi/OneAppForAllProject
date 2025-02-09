@@ -4,38 +4,38 @@ import {
 } from "@heroui/listbox";
 import { Button, Checkbox, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, User, useDisclosure } from "@heroui/react";
 import { useLocation, useNavigate, useSubmit } from "@remix-run/react";
-import { Bookmark, BookmarkBook, Clock, Git, Home, QuestionMark, SendMail, Settings } from "iconoir-react";
+import { Bookmark, BookmarkBook, Clock, Git, Home, QuestionMark, SendMail, Settings, StatsReport } from "iconoir-react";
 import { useEffect, useState } from "react";
 import config from '../services/servicesConfig.json';
 
 
 const ListBoxItems = [
   {
-    key:"dashboard",
-    content:"工作台",
+    key:"/",
+    content:"主页",
     icon:<Home/>
   },
   {
-    key:"about",
-    content:"关于",
+    key:"dashboard",
+    content:"工作台",
     icon:<Git/>
   },
   {
-    key:"1",
-    content:"产品说明",
-    icon:<QuestionMark/>,
+    key:"accountmanagement",
+    content:"账号管理",
+    icon:<StatsReport/>,
   }, 
   {
     key:"report",
     content:"反馈",
-    icon:<SendMail/>
-  },
-  {
-    key:"favorite",
-    content:"收藏",
-    icon:<Bookmark/>,
-    description:"开发中，敬请期待"
+    icon:<SendMail/>,
   }
+  // {
+  //   key:"favorite",
+  //   content:"收藏",
+  //   icon:<Bookmark/>,
+  //   description:"开发中，敬请期待"
+  // }
 ]
 
 export default function SideBar({username = "", userId = 0 }: { username:string, userId:number }) {
@@ -106,7 +106,7 @@ export default function SideBar({username = "", userId = 0 }: { username:string,
             else{ navigate('/'+key); } 
           }}>
           { ListBoxItems.map((item) => (
-            <ListboxItem className="h-11" key={item.key} startContent={item.icon} description={item.description}>
+            <ListboxItem className="h-11" key={item.key} startContent={item.icon} >
               {item.content}
             </ListboxItem>
           ))}
