@@ -34,7 +34,7 @@ export default function dashboard(){
                             
                             {/* <p>{report.status}</p> */}
                             <div className="text-row my-2">
-                            <span className="text-gray-500 mx-2">反馈id：{report.id}</span>
+                            <span className="text-gray-500 mx-2 text-sm">反馈id：{report.id}</span>
                             <span className="mx-2">状态:{
                                 report.status=="pendding"?
                                 <span className="text-yellow-500">反馈处理中</span>:
@@ -46,7 +46,7 @@ export default function dashboard(){
                             <span className="mx-2">用户id：{report.userId}</span>
                             
                             </div>
-                            <span>反馈内容：{report.content}</span>
+                            <span className="px-6">反馈内容：{report.content}</span>
                             <Form method="post">
                                 <div className="py-2">
                                 <Input className="hidden" type="text" name="reportId" value={report.id}></Input>

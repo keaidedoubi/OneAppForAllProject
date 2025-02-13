@@ -57,7 +57,7 @@ export default function Report() {
                     {!reports ? (
                         <p>暂无反馈</p>
                     ) : (reports.map((report: any) => (
-                        <Card className="my-4 mx-2 h-24">
+                        <Card className="my-4 mx-2 py-4">
                             {/* <p>id:{report.id}</p> */}
                             <p>状态:{
                                 report.status=="pendding"?
@@ -67,8 +67,11 @@ export default function Report() {
                                 report.status=="fail"?
                                 <span className="text-rose-500">反馈已被驳回</span>:<span className="text-rose-500">出现错误，请联系管理员</span>
                             }</p>
-                            <p>反馈内容:{report.content}</p>
-                            {!report.replies ? (<p>暂无回复</p>) : (report.replies.map((reply: any) => (
+                            <p>反馈内容:</p>
+                            <ScrollShadow className="max-w-fit px-6 m-auto">
+                                <div>{report.content}</div>
+                            </ScrollShadow>
+                            {!report.replies ? (<span className="text-gray-500">暂无回复</span>) : (report.replies.map((reply: any) => (
                                 <div>
                                     <p>{reply.id}</p>
                                     <p>{reply.content} - {reply.isAdmin ? "管理员" : "用户"}</p>
