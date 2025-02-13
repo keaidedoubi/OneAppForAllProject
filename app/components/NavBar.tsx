@@ -1,6 +1,10 @@
 import { Image, Link, Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
 
-export default function NavBar(){
+interface NavBarProp {
+  isLogin: boolean;
+}
+
+const NavBar: React.FC<NavBarProp> = ({ isLogin }) => {
   return(
     <Navbar position="static" className="border-b-1">
       <NavbarBrand >
@@ -13,9 +17,12 @@ export default function NavBar(){
           <Link href="/" className="border-y-1 border-white hover:border-b-cyan-700 text-black">首页</Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="/login" className="border-y-1 border-white hover:border-b-cyan-700 text-black">登录</Link>
+          {!isLogin?
+          (<Link href="/login" className="border-y-1 border-white hover:border-b-cyan-700 text-black">登录</Link>):
+          (<Link href="/logout" className="border-y-1 border-white hover:border-b-cyan-700 text-black">退出登录</Link>)}
         </NavbarItem>
       </NavbarContent>
     </Navbar>
   );
 }
+export default NavBar;

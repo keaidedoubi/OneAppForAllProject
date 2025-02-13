@@ -16,11 +16,6 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  // return (
-  //   <div className="flex h-screen items-center justify-center">
-  //     <>Welcome</>
-  //   </div>
-  // );
   const [color, setColor] = useState("#ffffff");
   useEffect(() => {
     setColor("#000000");
@@ -30,7 +25,7 @@ export default function Index() {
   return(
     <div className="min-h-[780px] flex flex-col w-screen h-screen text-center">
       {/* <SideBar/> */}
-      <NavBar/>
+      <NavBar isLogin={false} />
       <Spacer y={52}/>
       <Particles
         className="absolute inset-0"
@@ -42,7 +37,7 @@ export default function Index() {
       <div className="mx-auto pt-0 w-full max-w-[40rem] items-center justify-center overflow-hidden">
         <BoxReveal boxColor={"#5046e6"} duration={0.5}>
           <p className="text-[3rem] font-semibold text-center">
-          “易”封信件，建议即刻收到<span className="text-[#5046e6]">.</span>
+          一封信件，建议即刻收到<span className="text-[#5046e6]">.</span>
           </p>
         </BoxReveal>
         <BoxReveal boxColor={"#5046e6"} duration={0.5}>
@@ -55,7 +50,7 @@ export default function Index() {
         <BoxReveal boxColor={"#5046e6"} duration={0.5}>
           <div className="mt-[1.5rem]">
             <p>
-            校长信箱
+            校园信箱
               {/* <span className="font-semibold text-[#5046e6]"></span> */}<br />
             </p>
           </div>

@@ -35,6 +35,13 @@ export async function adminGetReports(userId:string) {
 
 
 
-export async function changeReportStatus(reportId:string, newStatus:string) {
+export async function changeReportStatus(reportId:any, newStatus:string) {
   // await prisma.report.findUnique({ where })
+  const changeStatus = await prisma.report.update({
+    where: { id: reportId }, 
+    data: {
+      status: newStatus, 
+    },
+  });
+  return changeStatus
 }
