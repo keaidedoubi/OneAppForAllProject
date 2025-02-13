@@ -6,7 +6,7 @@ export async function sendReport(content:string,userId:string) {
   const createReport = await prisma.report.create({ data:{
     content,
     userId,
-    status: "pending" // or any default status value
+    status: "pendding" // or any default status value
   }});
   return createReport;
 }
